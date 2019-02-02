@@ -28,7 +28,7 @@ $router->group(['prefix' => '/'],function () use ($router) {
     });
 
     $router->group(['prefix' => 'banks'], function () use ($router) {
-        $router->get('/',  ['uses' => 'BankController@getOneOrAllATMs']);
+        $router->get('/',  ['uses' => 'BankController@getOneOrAllBanks']);
 
         $router->post('/', ['uses' => 'BankController@create']);
 

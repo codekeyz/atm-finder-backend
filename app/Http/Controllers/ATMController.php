@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ATM;
+use App\Search\ATMSearch;
 use Illuminate\Http\Request;
 
 class ATMController extends Controller
@@ -17,15 +18,14 @@ class ATMController extends Controller
         //
     }
 
-    public function getOneOrAllATMs()
+    public function getOneOrAllATMs(Request $request, ATM $atm)
     {
-        return response()->json(ATM::all());
+        $result = ATMSearch::apply($request);
+        if ($result->count() == 1){
+            $result = $result->first();
+        }
+        return response()->json($result);
     }
-
-//    public function getOneATM($id)
-//    {
-//        return response()->json(ATM::find($id));
-//    }
 
     public function create(Request $request)
     {
@@ -36,10 +36,10 @@ class ATMController extends Controller
 
     public function update($id, Request $request)
     {
-        $author = ATM::findOrFail($id);
-        $author->update($request->all());
+        $atm = ATM::findOrFail($id);
+        $atm->update($request->all());
 
-        return response()->json($author, 200);
+        return response()->json($atm, 200);
     }
 
     public function delete($id)

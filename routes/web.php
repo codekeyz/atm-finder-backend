@@ -11,11 +11,11 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
-
 $router->group(['prefix' => '/'],function () use ($router) {
+
+    $router->get('/', function () use ($router) {
+        return $router->app->version();
+    });
 
     $router->group(['prefix' => 'atms'], function () use ($router) {
         $router->get('/',  ['uses' => 'ATMController@getOneOrAllATMs']);
@@ -25,6 +25,16 @@ $router->group(['prefix' => '/'],function () use ($router) {
         $router->delete('/{id}', ['uses' => 'ATMController@delete']);
 
         $router->put('/{id}', ['uses' => 'ATMController@update']);
+    });
+
+    $router->group(['prefix' => 'banks'], function () use ($router) {
+        $router->get('/',  ['uses' => 'BankController@getOneOrAllATMs']);
+
+        $router->post('/', ['uses' => 'BankController@create']);
+
+        $router->delete('/{id}', ['uses' => 'BankController@delete']);
+
+        $router->put('/{id}', ['uses' => 'BankController@update']);
     });
 
 });

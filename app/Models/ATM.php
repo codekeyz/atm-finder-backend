@@ -37,4 +37,7 @@ class ATM extends Model
      */
     protected $hidden = [];
 
+    public function bank() {
+        return $this->belongsTo(Bank::class);
+    }
 }

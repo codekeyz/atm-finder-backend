@@ -14,3 +14,17 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => '/'],function () use ($router) {
+
+    $router->group(['prefix' => 'atms'], function () use ($router) {
+        $router->get('/',  ['uses' => 'ATMController@getOneOrAllATMs']);
+
+        $router->post('/', ['uses' => 'ATMController@create']);
+
+        $router->delete('/{id}', ['uses' => 'ATMController@delete']);
+
+        $router->put('/{id}', ['uses' => 'ATMController@update']);
+    });
+
+});

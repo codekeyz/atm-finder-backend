@@ -17,15 +17,15 @@ class ATMController extends Controller
         //
     }
 
-    public function getAllATMs()
+    public function getOneOrAllATMs()
     {
         return response()->json(ATM::all());
     }
 
-    public function getOneATM($id)
-    {
-        return response()->json(ATM::find($id));
-    }
+//    public function getOneATM($id)
+//    {
+//        return response()->json(ATM::find($id));
+//    }
 
     public function create(Request $request)
     {

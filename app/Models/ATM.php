@@ -13,6 +13,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ATM extends Model
 {
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'atms';
+
     /**
      * The attributes that are mass assignable.
      *

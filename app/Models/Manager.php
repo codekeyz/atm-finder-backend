@@ -27,7 +27,7 @@ class Manager extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password'
+        'name', 'email', 'password', 'bank_id'
     ];
 
     /**
@@ -40,6 +40,6 @@ class Manager extends Model
     ];
 
     public function atms() {
-        return $this->hasMany(ATM::class);
+        return $this->hasManyThrough(ATM::class, Bank::class);
     }
 }

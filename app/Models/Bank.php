@@ -8,36 +8,26 @@
 
 namespace App\Models;
 
-
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticableTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Bank extends Model
+class Bank extends Model implements Authenticatable
 {
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'banks';
+    use AuthenticableTrait;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'desc', 'country', 'city', 'town'
-    ];
+    protected $fillable = ['name', 'email', 'password', 'desc', 'country', 'city', 'town'];
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = ['password'];
 
-    public function atms() {
+    public function atms()
+    {
         return $this->hasMany(ATM::class);
     }
 }

@@ -38,6 +38,6 @@ class Bank extends Model
     protected $hidden = [];
 
     public function atms() {
-        return $this->hasMany(ATM::class, 'bank_id');
+        return $this->hasMany(ATM::class);
     }
 }

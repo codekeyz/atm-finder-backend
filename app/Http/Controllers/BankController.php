@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bank;
 use App\Search\BankSearch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -23,7 +24,7 @@ class BankController extends Controller
     public function getOneOrAllBanks(Request $request)
     {
         $result = BankSearch::apply($request);
-        if ($result->count() == 1){
+        if ($result->count() == 1) {
             $result = $result->first();
         }
         return response()->json($result);
@@ -32,8 +33,8 @@ class BankController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, [
-            'name'     => 'required|max:255|unique:banks',
-            'email'    => 'required|email|max:255|unique:banks',
+            'name' => 'required|max:255|unique:banks',
+            'email' => 'required|email|max:255|unique:banks',
             'password' => 'required',
         ]);
         $payload = $request->all();
@@ -59,14 +60,14 @@ class BankController extends Controller
     public function login(Request $request)
     {
         $this->validate($request, [
-            'email'    => 'required|email|max:255',
+            'email' => 'required|email|max:255',
             'password' => 'required',
         ]);
 
         try {
 
-            if (! $token = $this->jwt->attempt($request->only('email', 'password'))) {
-                return response()->json(['user_not_found'], 404);
+            if (!$token = $this->auth()->attempt($request->only('email', 'password'))) {
+                return response()->json(['error' => 'Unauthorized'], 401);
             }
 
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
@@ -83,6 +84,27 @@ class BankController extends Controller
 
         }
 
-        return response()->json(compact('token'));
+        return $this->respondWithToken($token);
     }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => $this->auth()->factory()->getTTL() * 60
+        ]);
+    }
+
+    public function auth() {
+        return $this->jwt;
+    }
+
 }

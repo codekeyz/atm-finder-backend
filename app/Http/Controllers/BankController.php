@@ -87,6 +87,14 @@ class BankController extends Controller
         return $this->respondWithToken($token);
     }
 
+    public function me() {
+        return response()->json($this->auth()->user());
+    }
+
+    public function getManagers() {
+        return 'it works';
+    }
+
     /**
      * Get the token array structure.
      *

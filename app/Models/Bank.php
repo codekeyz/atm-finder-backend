@@ -46,4 +46,5 @@ class Bank extends Model implements JWTSubject, AuthenticatableContract, Authori
     {
         return [];
     }
+
 }

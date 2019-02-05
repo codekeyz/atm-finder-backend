@@ -42,4 +42,8 @@ class Manager extends Model
     public function atms() {
         return $this->hasManyThrough(ATM::class, Bank::class);
     }
+
+    public function bank() {
+        return $this->belongsTo(Bank::class);
+    }
 }

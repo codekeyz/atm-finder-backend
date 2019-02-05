@@ -33,6 +33,10 @@ class Bank extends Model implements JWTSubject, AuthenticatableContract, Authori
         return $this->hasMany(ATM::class);
     }
 
+    public function managers() {
+        return $this->hasMany(Manager::class);
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

@@ -11,9 +11,6 @@ use Tymon\JWTAuth\JWTAuth;
 
 class BankController extends Controller
 {
-    /**
-     * @var \Tymon\JWTAuth\JWTAuth
-     */
     protected $jwt;
 
     public function __construct(JWTAuth $jwt)

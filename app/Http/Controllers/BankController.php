@@ -18,7 +18,7 @@ class BankController extends Controller
         //
     }
 
-    public function getOneOrAllBanks(Request $request, Bank $Bank)
+    public function getOneOrAllBanks(Request $request)
     {
         $result = BankSearch::apply($request);
         if ($result->count() == 1){

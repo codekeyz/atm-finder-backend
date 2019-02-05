@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bank;
 use App\Search\BankSearch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
 
 class BankController extends Controller
@@ -30,9 +31,15 @@ class BankController extends Controller
 
     public function create(Request $request)
     {
-        $author = Bank::create($request->all());
-
-        return response()->json($author, 201);
+        $this->validate($request, [
+            'name'     => 'required|max:255|unique:banks',
+            'email'    => 'required|email|max:255|unique:banks',
+            'password' => 'required',
+        ]);
+        $payload = $request->all();
+        $payload['password'] = Hash::make($payload['password']);
+        $bank = Bank::create($payload);
+        return response()->json($bank, 201);
     }
 
     public function update($id, Request $request)

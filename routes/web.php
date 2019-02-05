@@ -35,6 +35,8 @@ $router->group(['prefix' => '/'],function () use ($router) {
         $router->delete('/{id}', ['uses' => 'BankController@delete']);
 
         $router->put('/{id}', ['uses' => 'BankController@update']);
+
+        $router->post('/login', ['uses' => 'BankController@login']);
     });
 
 });

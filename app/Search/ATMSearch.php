@@ -21,11 +21,13 @@ class ATMSearch
         // Search for a atm based on their id.
         if ($filters->has('id')){
             $atm->where('id', $filters->get('id'));
+            $atm->with('bank');
         }
 
         // Search for a atm based on their name.
         if ($filters->has('name')) {
             $atm->where('name', $filters->input('name'));
+            $atm->with('bank');
         }
         return $atm->get();
     }

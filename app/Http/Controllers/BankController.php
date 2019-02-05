@@ -87,6 +87,18 @@ class BankController extends Controller
         return $this->respondWithToken($token);
     }
 
+    public function logout()
+    {
+        $this->auth()->invalidate($this->auth()->getToken());
+
+        return response()->json(['message' => 'Successfully logged you out' ]);
+    }
+
+    public function refresh()
+    {
+        return $this->respondWithToken($this->auth()->refresh());
+    }
+
     public function me() {
         return response()->json($this->auth()->user());
     }
@@ -95,13 +107,6 @@ class BankController extends Controller
         return 'it works';
     }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     protected function respondWithToken($token)
     {
         return response()->json([

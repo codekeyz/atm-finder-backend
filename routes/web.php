@@ -28,23 +28,23 @@ $router->group(['prefix' => '/'],function () use ($router) {
     });
 
     $router->group(['prefix' => 'banks'], function () use ($router) {
-//        $router->get('/',  ['uses' => 'BankController@getOneOrAllBanks']);
 
         $router->post('/', ['uses' => 'BankController@create']);
-
-//        $router->delete('/{id}', ['uses' => 'BankController@delete']);
-//        $router->put('/{id}', ['uses' => 'BankController@update']);
 
         $router->post('/login', ['uses' => 'BankController@login']);
 
         $router->group(['middleware' => 'auth:api', 'prefix' => 'me'], function () use ($router) {
+
             $router->post('', ['uses' => 'BankController@me']);
 
-            $router->post('/logout', ['uses' => 'BankController@logout']);
+            $router->post('logout', ['uses' => 'BankController@logout']);
 
             $router->post('refresh', 'AuthController@refresh');
 
             $router->get('managers', ['uses' => 'BankController@getManagers']);
+
+            $router->get('atms', ['uses' => 'BankController@getATMs']);
+
         });
     });
 

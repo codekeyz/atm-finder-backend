@@ -91,7 +91,11 @@ class BankController extends Controller
     }
 
     public function getManagers() {
-        return 'it works';
+        return response()->json($this->auth()->user()->managers);
+    }
+
+    public function getATMs() {
+        return response()->json($this->auth()->user()->atms);
     }
 
     protected function respondWithToken($token)

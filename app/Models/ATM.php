@@ -27,7 +27,7 @@ class ATM extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'lat', 'lng', 'bank_id', 'city'
+        'name', 'lat', 'lng', 'bank_id', 'city', 'status'
     ];
 
     /**

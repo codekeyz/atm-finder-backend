@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bank;
 use App\Search\BankSearch;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
@@ -66,19 +67,9 @@ class BankController extends Controller
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
 
-        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+        } catch (ValidationException $exception) {
 
-            return response()->json(['token_expired'], 500);
-
-        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-            return response()->json(['token_invalid'], 500);
-
-        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-            return response()->json(['token_absent' => $e->getMessage()], 500);
-
-        }
+    }
 
         return $this->respondWithToken($token);
     }

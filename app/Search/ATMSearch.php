@@ -18,17 +18,20 @@ class ATMSearch
     {
         $atm = (new ATM)->newQuery();
 
-        // Search for a atm based on their id.
+        // Search for an atm based on it's id.
         if ($filters->has('id')){
             $atm->where('id', $filters->get('id'));
-            $atm->with('bank');
         }
 
-        // Search for a atm based on their name.
+        // Search for an atm based on it's name.
         if ($filters->has('name')) {
             $atm->where('name', $filters->input('name'));
-            $atm->with('bank');
         }
-        return $atm->get();
+
+        // Search for an atm based on it's status
+        if ($filters->has('status')) {
+            $atm->where('status', $filters->input('status'));
+        }
+        return $atm->paginate(20);
     }
 }

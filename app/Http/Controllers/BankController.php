@@ -33,6 +33,7 @@ class BankController extends Controller
             'name' => 'required|max:255|unique:banks',
             'email' => 'required|email|max:255|unique:banks',
             'password' => 'required',
+            'country' => 'required'
         ]);
         $payload = $request->all();
         $payload['password'] = Hash::make($payload['password']);

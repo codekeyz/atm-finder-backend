@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ATMCollection;
 use App\Http\Resources\ATMResource;
 use App\Models\ATM;
 use App\Search\ATMSearch;
@@ -11,11 +10,6 @@ use Illuminate\Http\Request;
 class ATMController extends Controller
 {
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         //

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ATMCollection;
+use App\Http\Resources\ATMResource;
 use App\Models\ATM;
 use App\Search\ATMSearch;
 use Illuminate\Http\Request;
 
 class ATMController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
@@ -18,28 +21,28 @@ class ATMController extends Controller
         //
     }
 
-    public function getOneOrAllATMs(Request $request, ATM $atm)
+    public function getAllATMs(Request $request)
     {
         $result = ATMSearch::apply($request);
-        if ($result->count() == 1){
-            $result = $result->first();
-        }
-        return response()->json($result);
+        return ATMResource::collection($result);
+    }
+
+    public function getATM($id) {
+        $atm = ATM::findOrFail($id);
+        return new ATMResource($atm);
     }
 
     public function create(Request $request)
     {
-        $author = ATM::create($request->all());
-
-        return response()->json($author, 201);
+        $atm = ATM::create($request->all());
+        return new ATMResource($atm);
     }
 
     public function update($id, Request $request)
     {
         $atm = ATM::findOrFail($id);
         $atm->update($request->all());
-
-        return response()->json($atm, 200);
+        return new ATMResource($atm);
     }
 
     public function delete($id)

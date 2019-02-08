@@ -18,6 +18,7 @@ class ATMResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'status' => $this->status,
+            'city' => $this->city,
             'coordinate' => [
                 'lat' => $this->lat,
                 'lng' => $this->lng

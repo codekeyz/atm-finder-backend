@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\Resource;
 
 class ATMResource extends JsonResource
 {
@@ -23,13 +22,13 @@ class ATMResource extends JsonResource
                 'lat' => $this->lat,
                 'lng' => $this->lng
             ],
-            'bank' => [
+            'bank' => $this->when(!$request->user(), [
                 'name' => $this->bank->name,
                 'desc' => $this->bank->desc,
                 'country' => $this->bank->country,
                 'city' => $this->bank->city,
                 'town' => $this->bank->town
-            ],
+            ]),
             'created_at' => $this->when($request->user(), $this->created_at->toDateTimeString()),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

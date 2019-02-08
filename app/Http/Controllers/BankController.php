@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ATMCollection;
+use App\Http\Resources\ATMResource;
 use App\Models\Bank;
 use App\Search\BankSearch;
 use Dotenv\Exception\ValidationException;
@@ -49,8 +51,7 @@ class BankController extends Controller
         return response()->json($Bank, 200);
     }
 
-    public function delete($id)
-    {
+    public function delete($id){
         Bank::findOrFail($id)->delete();
         return response('Deleted Successfully', 200);
     }
@@ -64,7 +65,7 @@ class BankController extends Controller
 
         try {
 
-            if (!$token = $this->auth()->attempt($request->only('email', 'password'))) {
+            if (!$token = $this->jwt->attempt($request->only('email', 'password'))) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
 
@@ -77,39 +78,37 @@ class BankController extends Controller
 
     public function logout()
     {
-        $this->auth()->invalidate($this->auth()->getToken());
+        $this->jwt->invalidate($this->jwt->getToken());
 
         return response()->json(['message' => 'Successfully logged you out' ]);
     }
 
     public function refresh()
     {
-        return $this->respondWithToken($this->auth()->refresh());
+        return $this->respondWithToken($this->jwt->refresh());
     }
 
     public function me() {
-        return response()->json($this->auth()->user());
+        return response()->json($this->jwt->user());
     }
 
     public function getManagers() {
-        return response()->json($this->auth()->user()->managers);
+        return response()->json($this->jwt->user()->managers);
     }
 
     public function getATMs() {
-        return response()->json($this->auth()->user()->atms);
+        return ATMResource::collection($this->jwt->user()->atms);
     }
 
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => $this->auth()->factory()->getTTL() * 60
+            'token' => $token,
+            'type' => 'bearer',
+            'expires_in' => $this->jwt->factory()->getTTL() * 60
         ]);
     }
 
-    public function auth() {
-        return $this->jwt;
-    }
+
 
 }

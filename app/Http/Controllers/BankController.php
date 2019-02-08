@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ATMCollection;
 use App\Http\Resources\ATMResource;
 use App\Models\Bank;
+use App\Search\ATMSearch;
 use App\Search\BankSearch;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
@@ -90,14 +91,6 @@ class BankController extends Controller
 
     public function me() {
         return response()->json($this->jwt->user());
-    }
-
-    public function getManagers() {
-        return response()->json($this->jwt->user()->managers);
-    }
-
-    public function getATMs() {
-        return ATMResource::collection($this->jwt->user()->atms);
     }
 
     protected function respondWithToken($token)

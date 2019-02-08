@@ -17,7 +17,7 @@ class ManagerResource extends Resource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->status,
+            'email' => $this->email,
             'created_at' => $this->when($request->user(), $this->created_at->toDateTimeString()),
             'updated_at' => $this->when($request->user(), $this->updated_at->toDateTimeString())
         ];

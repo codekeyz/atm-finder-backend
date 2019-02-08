@@ -9,7 +9,6 @@
 namespace App\Search;
 
 
-use App\Models\ATM;
 use App\Models\Manager;
 use Illuminate\Http\Request;
 
@@ -19,17 +18,26 @@ class ManagerSearch
     {
         $manager = (new Manager)->newQuery();
 
+        // Return managers for a bank
+        if ($filters->user()) {
+            $manager->where('bank_id', $filters->user()->id);
+        }
+
         // Search for a atm based on their id.
         if ($filters->has('id')){
             $manager->where('id', $filters->get('id'));
-            $manager->with('bank');
         }
 
         // Search for a atm based on their name.
         if ($filters->has('name')) {
             $manager->where('name', $filters->input('name'));
-            $manager->with('bank');
         }
-        return $manager->get();
+
+        // Search for a manager based on their bank id.
+        if ($filters->has('bank_id')) {
+            $manager->where('bank_id', $filters->input('bank_id'));
+
+        }
+        return $manager->paginate(20);
     }
 }

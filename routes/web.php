@@ -45,23 +45,25 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
             $router->group(['prefix' => 'managers'], function () use ($router) {
 
-                $router->get('', ['uses' => 'ManagerController@getManagers']);
+                $router->get('/', ['uses' => 'ManagerController@getManagers']);
 
-                $router->put('', ['uses' => 'ManagerController@update']);
+                $router->post('/', ['uses' => 'ManagerController@create']);
 
-                $router->post('', ['uses' => 'ManagerController@create']);
+                $router->get('/{id}', ['uses' => 'ManagerController@getManager']);
 
-                $router->delete('', ['uses' => 'ManagerController@delete']);
+                $router->put('/{id}', ['uses' => 'ManagerController@update']);
+
+                $router->delete('/{id}', ['uses' => 'ManagerController@delete']);
 
             });
 
             $router->group(['prefix' => 'atms'], function () use ($router) {
 
-                $router->get('', ['uses' => 'ATMController@getAllATMs']);
-
-                $router->get('/{id}', ['uses' => 'ATMController@getATM']);
+                $router->get('/', ['uses' => 'ATMController@getAllATMs']);
 
                 $router->post('/', ['uses' => 'ATMController@create']);
+
+                $router->get('/{id}', ['uses' => 'ATMController@getATM']);
 
                 $router->delete('/{id}', ['uses' => 'ATMController@delete']);
 

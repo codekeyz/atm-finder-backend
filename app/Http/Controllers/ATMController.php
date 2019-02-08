@@ -17,8 +17,7 @@ class ATMController extends Controller
 
     public function getAllATMs(Request $request)
     {
-        $result = ATMSearch::apply($request);
-        return ATMResource::collection($result);
+        return ATMResource::collection(ATMSearch::apply($request));
     }
 
     public function getATM($id) {
@@ -35,7 +34,8 @@ class ATMController extends Controller
     public function update($id, Request $request)
     {
         $atm = ATM::findOrFail($id);
-        $atm->update($request->all());
+        $update = $request->only(['name', 'status', 'lat', 'lng', 'city']);
+        $atm->update($update);
         return new ATMResource($atm);
     }
 

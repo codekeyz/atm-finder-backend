@@ -37,15 +37,38 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
         $router->group(['middleware' => 'auth:api', 'prefix' => 'me'], function () use ($router) {
 
-            $router->post('', ['uses' => 'BankController@me']);
+            $router->get('', ['uses' => 'BankController@me']);
 
             $router->post('logout', ['uses' => 'BankController@logout']);
 
             $router->post('refresh', 'AuthController@refresh');
 
-            $router->get('managers', ['uses' => 'BankController@getManagers']);
+            $router->group(['prefix' => 'managers'], function () use ($router) {
 
-            $router->get('atms', ['uses' => 'BankController@getATMs']);
+                $router->get('', ['uses' => 'ManagerController@getManagers']);
+
+                $router->put('', ['uses' => 'ManagerController@update']);
+
+                $router->post('', ['uses' => 'ManagerController@create']);
+
+                $router->delete('', ['uses' => 'ManagerController@delete']);
+
+            });
+
+            $router->group(['prefix' => 'atms'], function () use ($router) {
+
+                $router->get('', ['uses' => 'ATMController@getAllATMs']);
+
+                $router->get('/{id}', ['uses' => 'ATMController@getATM']);
+
+                $router->post('/', ['uses' => 'ATMController@create']);
+
+                $router->delete('/{id}', ['uses' => 'ATMController@delete']);
+
+                $router->put('/{id}', ['uses' => 'ATMController@update']);
+
+            });
+
 
         });
     });

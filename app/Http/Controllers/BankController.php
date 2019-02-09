@@ -44,15 +44,17 @@ class BankController extends Controller
         return response()->json($bank, 201);
     }
 
-    public function update($id, Request $request)
+    public function update(Request $request)
     {
+        $id = $request->user()->id;
         $Bank = Bank::findOrFail($id);
         $Bank->update($request->all());
 
         return response()->json($Bank, 200);
     }
 
-    public function delete($id){
+    public function delete(Request $request){
+        $id = $request->user()->id;
         Bank::findOrFail($id)->delete();
         return response('Deleted Successfully', 200);
     }

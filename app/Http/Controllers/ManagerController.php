@@ -18,12 +18,11 @@ class ManagerController extends Controller
         $this->jwt = $jwt;
     }
 
-    public function getManagers(Request $request)
-    {
+    public function getManagers(Request $request){
         return ManagerResource::collection(ManagerSearch::apply($request));
     }
 
-    public function getManager($id) {
+    public function getManager($id){
         $manager = Manager::findOrFail($id);
         return new ManagerResource($manager);
     }
@@ -55,7 +54,4 @@ class ManagerController extends Controller
         Manager::findOrFail($id)->delete();
         return response('Deleted Successfully', 200);
     }
-
-
-
 }

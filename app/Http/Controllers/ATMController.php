@@ -27,7 +27,16 @@ class ATMController extends Controller
 
     public function create(Request $request)
     {
-        $atm = ATM::create($request->all());
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'city' => 'required|string',
+            'status' => 'required|numeric',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric'
+        ]);
+        $payload = $request->all();
+        $payload['bank_id'] = $request->user()->id;
+        $atm = ATM::create($payload);
         return new ATMResource($atm);
     }
 

@@ -42,6 +42,13 @@ class ATMController extends Controller
 
     public function update($id, Request $request)
     {
+        $this->validate($request, [
+            'name' => 'max:255',
+            'city' => 'string',
+            'status' => 'numeric',
+            'lat' => 'numeric',
+            'lng' => 'numeric'
+        ]);
         $atm = ATM::findOrFail($id);
         $update = $request->only(['name', 'status', 'lat', 'lng', 'city']);
         $atm->update($update);

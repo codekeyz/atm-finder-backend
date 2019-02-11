@@ -18,7 +18,7 @@ class CreateBanksTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('desc');
+            $table->string('desc')->nullable();
             $table->string('country');
             $table->string('city');
             $table->string('town');

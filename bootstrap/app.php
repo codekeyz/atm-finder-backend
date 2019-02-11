@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 try {
     (new Dotenv\Dotenv(dirname(__DIR__)))->load();
@@ -23,9 +23,9 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
- $app->withFacades();
+$app->withFacades();
 
- $app->withEloquent();
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -63,9 +63,11 @@ $app->middleware([
     App\Http\Middleware\CorsMiddleware::class
 ]);
 
- $app->routeMiddleware([
-     'auth' => App\Http\Middleware\Authenticate::class,
- ]);
+$app->routeMiddleware([
+//     'auth' => App\Http\Middleware\Authenticate::class,
+    'jwt.auth' => Tymon\JWTAuth\Http\Middleware\Authenticate::class,
+    'jwt.refresh' => Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -78,9 +80,9 @@ $app->middleware([
 |
 */
 
- $app->register(App\Providers\AppServiceProvider::class);
- $app->register(App\Providers\AuthServiceProvider::class);
- $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
@@ -97,7 +99,7 @@ $app->middleware([
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 return $app;

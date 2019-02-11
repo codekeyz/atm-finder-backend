@@ -29,7 +29,7 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
         $router->post('/login', ['uses' => 'BankController@login']);
 
-        $router->group(['middleware' => 'auth:api', 'prefix' => 'me'], function () use ($router) {
+        $router->group(['middleware' => 'jwt.auth', 'prefix' => 'me'], function () use ($router) {
 
             $router->group([''], function () use ($router) {
 
@@ -43,7 +43,7 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
             $router->post('logout', ['uses' => 'BankController@logout']);
 
-            $router->post('refresh', 'AuthController@refresh');
+            $router->post('refresh', 'BankController@refresh');
 
             $router->group(['prefix' => 'managers'], function () use ($router) {
 

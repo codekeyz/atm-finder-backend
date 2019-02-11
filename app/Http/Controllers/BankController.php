@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ATMCollection;
 use App\Http\Resources\ATMResource;
+use App\Http\Resources\BankResource;
 use App\Models\Bank;
 use App\Search\ATMSearch;
 use App\Search\BankSearch;
@@ -23,11 +24,7 @@ class BankController extends Controller
 
     public function getOneOrAllBanks(Request $request)
     {
-        $result = BankSearch::apply($request);
-        if ($result->count() == 1) {
-            $result = $result->first();
-        }
-        return response()->json($result);
+        return BankResource::collection(BankSearch::apply($request));
     }
 
     public function create(Request $request)
@@ -36,21 +33,21 @@ class BankController extends Controller
             'name' => 'required|max:255|unique:banks',
             'email' => 'required|email|max:255|unique:banks',
             'password' => 'required',
-            'country' => 'required'
+            'country' => 'required|string'
         ]);
         $payload = $request->all();
         $payload['password'] = Hash::make($payload['password']);
         $bank = Bank::create($payload);
-        return response()->json($bank, 201);
+        return new BankResource($bank);
     }
 
     public function update(Request $request)
     {
         $id = $request->user()->id;
-        $Bank = Bank::findOrFail($id);
-        $Bank->update($request->all());
+        $bank = Bank::findOrFail($id);
+        $bank->update($request->all());
 
-        return response()->json($Bank, 200);
+        return new BankResource($bank);
     }
 
     public function delete(Request $request){
@@ -92,7 +89,7 @@ class BankController extends Controller
     }
 
     public function me() {
-        return response()->json($this->jwt->user());
+        return new BankResource($this->jwt->user());
     }
 
     protected function respondWithToken($token)
@@ -103,7 +100,5 @@ class BankController extends Controller
             'expires_in' => $this->jwt->factory()->getTTL() * 60
         ]);
     }
-
-
 
 }

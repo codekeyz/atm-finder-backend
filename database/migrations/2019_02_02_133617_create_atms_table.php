@@ -18,7 +18,7 @@ class CreateAtmsTable extends Migration
             $table->string('name')->unique();
             $table->double('lat');
             $table->double('lng');
-            $table->integer('status')->unsigned();
+            $table->integer('status');
             $table->integer('bank_id')->unsigned()->index();
             $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade');
             $table->string('city');

@@ -2,24 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ATMCollection;
-use App\Http\Resources\ATMResource;
 use App\Http\Resources\BankResource;
 use App\Models\Bank;
-use App\Search\ATMSearch;
 use App\Search\BankSearch;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\JWTAuth;
 
 class BankController extends Controller
 {
-    protected $jwt;
 
-    public function __construct(JWTAuth $jwt)
+    public function __construct()
     {
-        $this->jwt = $jwt;
+        $this->middleware('auth:api', ['except' => ['login']]);
     }
 
     public function getOneOrAllBanks(Request $request)
@@ -48,6 +44,8 @@ class BankController extends Controller
         $bank = Bank::findOrFail($id);
         $bank->update($request->all());
 
+        auth();
+
         return new BankResource($bank);
     }
 
@@ -66,7 +64,7 @@ class BankController extends Controller
 
         try {
 
-            if (!$token = $this->jwt->attempt($request->only('email', 'password'))) {
+            if (!$token = $this->guard()->attempt($request->only('email', 'password'))) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
 
@@ -79,27 +77,31 @@ class BankController extends Controller
 
     public function logout()
     {
-        $this->jwt->invalidate($this->jwt->getToken());
+        $this->guard()->invalidate($this->guard()->getToken());
 
         return response()->json(['message' => 'Successfully logged you out' ]);
     }
 
     public function refresh()
     {
-        return $this->respondWithToken($this->jwt->refresh());
+        return $this->respondWithToken($this->guard()->refresh());
     }
 
     public function me() {
-        return new BankResource($this->jwt->user());
+        return new BankResource($this->guard()->user());
     }
 
     protected function respondWithToken($token)
     {
         return response()->json([
+            'user' => $this->me(),
             'token' => $token,
             'type' => 'bearer',
-            'expires_in' => $this->jwt->factory()->getTTL() * 60
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
         ]);
     }
 
+    public function guard() {
+        return Auth::guard('api');
+    }
 }

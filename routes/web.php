@@ -29,7 +29,7 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
         $router->post('/login', ['uses' => 'BankController@login']);
 
-        $router->group(['middleware' => 'jwt.auth', 'prefix' => 'me'], function () use ($router) {
+        $router->group(['prefix' => 'me'], function () use ($router) {
 
             $router->group([''], function () use ($router) {
 

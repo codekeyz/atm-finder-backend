@@ -22,7 +22,8 @@ class BankResource extends Resource
             'city' => $this->city,
             'country' => $this->country,
             'total_atms' => $this->atms->count(),
-            'total_managers' => $this->managers->count()
+            'total_managers' => $this->managers->count(),
+            'subscriptions' => $request->user()->subscriptions()
         ];
     }
 }

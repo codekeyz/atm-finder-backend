@@ -44,8 +44,6 @@ class BankController extends Controller
         $bank = Bank::findOrFail($id);
         $bank->update($request->all());
 
-        auth();
-
         return new BankResource($bank);
     }
 

@@ -27,6 +27,8 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
         $router->post('/', ['uses' => 'BankController@create']);
 
+
+
         $router->post('/login', ['uses' => 'BankController@login']);
 
         $router->group(['prefix' => 'me'], function () use ($router) {

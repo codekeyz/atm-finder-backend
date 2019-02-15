@@ -9,6 +9,7 @@
 namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
+use Laravel\Cashier\Billable;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -17,7 +18,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Bank extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
 {
-    use Authenticatable, Authorizable;
+    use Authenticatable, Authorizable, Billable;
 
     protected $fillable = ['name', 'email', 'password', 'desc', 'country', 'city', 'town'];
 
@@ -46,5 +47,4 @@ class Bank extends Model implements JWTSubject, AuthenticatableContract, Authori
     {
         return [];
     }
-
 }

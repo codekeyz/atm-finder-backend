@@ -6,22 +6,33 @@ use App\Http\Resources\ManagerResource;
 use App\Models\Manager;
 use App\Search\ManagerSearch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\JWTAuth;
+use Dotenv\Exception\ValidationException;
 
 class ManagerController extends Controller
 {
-    protected $jwt;
-
-    public function __construct(JWTAuth $jwt)
-    {
-        $this->jwt = $jwt;
-    }
-
     public function getManagers(Request $request){
         return ManagerResource::collection(ManagerSearch::apply($request));
     }
 
+    public function login(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email|max:255',
+            'password' => 'required',
+        ]);
+
+        try {
+
+            if (!$token = $this->guard()->attempt($request->only('email', 'password'))) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+
+        } catch (ValidationException $exception) {
+
+        }
+    }
     public function getManager($id){
         $manager = Manager::findOrFail($id);
         return new ManagerResource($manager);
@@ -54,5 +65,9 @@ class ManagerController extends Controller
     {
         Manager::findOrFail($id)->delete();
         return response('Deleted Successfully', 200);
+    }
+
+    public function guard() {
+        return Auth::guard('manager');
     }
 }

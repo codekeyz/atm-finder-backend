@@ -32,7 +32,8 @@ class ManagerController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:managers',
-            'password' => 'required'
+            'password' => 'required',
+            'branch_id' => 'required'
         ]);
         $payload = $request->all();
         $payload['bank_id'] = $request->user()->id;

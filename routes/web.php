@@ -31,7 +31,7 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
         $router->post('login', ['uses' => 'BankController@login']);
 
-        $router->group(['middleware' => 'auth:api', 'prefix' => 'me'], function () use ($router) {
+        $router->group(['middleware' => 'auth:bank', 'prefix' => 'me'], function () use ($router) {
 
             $router->group([''], function () use ($router) {
 
@@ -91,6 +91,12 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
 
         });
+    });
+
+    $router->group(['prefix' => 'managers'], function () use ($router) {
+
+        $router->post('login', ['uses' => 'ManagerController@login']);
+
     });
 
 });

@@ -32,7 +32,8 @@ class ATMController extends Controller
             'city' => 'required|string',
             'status' => 'required|numeric',
             'lat' => 'required|numeric',
-            'lng' => 'required|numeric'
+            'lng' => 'required|numeric',
+            'branch' => 'required|numeric'
         ]);
         $payload = $request->all();
         $payload['bank_id'] = $request->user()->id;

@@ -39,7 +39,7 @@ class Manager extends Model
     ];
 
     public function atms() {
-        return $this->hasManyThrough(ATM::class, Bank::class);
+        return $this->hasManyThrough(ATM::class, Branch::class);
     }
 
     public function bank() {

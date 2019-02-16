@@ -9,11 +9,11 @@
 namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Cashier\Billable;
 use Laravel\Lumen\Auth\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Bank extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
@@ -34,8 +34,14 @@ class Bank extends Model implements JWTSubject, AuthenticatableContract, Authori
         return $this->hasMany(ATM::class);
     }
 
-    public function managers() {
-        return $this->hasMany(Manager::class);
+    public function branches()
+    {
+        return $this->hasMany(Branch::class);
+    }
+
+    public function managers()
+    {
+        return $this->hasManyThrough(Manager::class, Branch::class);
     }
 
     public function getJWTIdentifier()

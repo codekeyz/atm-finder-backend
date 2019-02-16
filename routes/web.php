@@ -25,11 +25,11 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
     $router->group(['prefix' => 'banks'], function () use ($router) {
 
-        $router->post('/', ['uses' => 'BankController@create']);
+        $router->post('', ['uses' => 'BankController@create']);
 
+        $router->get('plans', ['uses' => 'SubscriptionsController@getPlans']);
 
-
-        $router->post('/login', ['uses' => 'BankController@login']);
+        $router->post('login', ['uses' => 'BankController@login']);
 
         $router->group(['prefix' => 'me'], function () use ($router) {
 

@@ -33,7 +33,7 @@ class ATMController extends Controller
             'status' => 'required|numeric',
             'lat' => 'required|numeric',
             'lng' => 'required|numeric',
-            'branch' => 'required|numeric'
+            'branch_id' => 'required|numeric|exists:branches,id'
         ]);
         $payload = $request->all();
         $payload['bank_id'] = $request->user()->id;
@@ -48,17 +48,26 @@ class ATMController extends Controller
             'city' => 'string',
             'status' => 'numeric',
             'lat' => 'numeric',
-            'lng' => 'numeric'
+            'lng' => 'numeric',
+            'branch_id' => 'numeric'
         ]);
         $atm = ATM::findOrFail($id);
-        $update = $request->only(['name', 'status', 'lat', 'lng', 'city']);
+        $update = $request->only(['name', 'status', 'lat', 'lng', 'city', 'branch_id']);
         $atm->update($update);
         return new ATMResource($atm);
     }
 
-    public function delete($id)
+    public function delete($id, Request $request)
     {
-        ATM::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        $atm = (new ATM)->newQuery();
+        $result = $atm
+            ->where('bank_id', $request->user()->id)
+            ->where('id', $id)
+            ->first();
+        if (!$result) {
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
+        }
+        $result->delete();
+        return $this->sendErrorMessage(200, true, 'Action completed successfully');
     }
 }

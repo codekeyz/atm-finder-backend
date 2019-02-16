@@ -89,13 +89,38 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
             });
 
-
         });
     });
 
     $router->group(['prefix' => 'managers'], function () use ($router) {
 
         $router->post('login', ['uses' => 'ManagerController@login']);
+
+        $router->group(['middleware' => 'auth:manager', 'prefix' => 'me'], function () use ($router) {
+
+            $router->group([''], function () use ($router) {
+
+                $router->get('',['uses' => 'ManagerController@me']);
+
+                $router->put('', ['uses' => 'ManagerController@update']);
+
+                $router->delete('', ['uses' => 'ManagerController@delete']);
+
+            });
+
+            $router->post('logout', ['uses' => 'ManagerController@logout']);
+
+            $router->post('refresh', 'ManagerController@refresh');
+
+            $router->group(['prefix' => 'atms'], function () use ($router) {
+
+                $router->get('/', ['uses' => 'ManagerController@getMyATMS']);
+
+                $router->put('/{id}', ['uses' => 'ManagerController@updateATM']);
+
+            });
+
+        });
 
     });
 

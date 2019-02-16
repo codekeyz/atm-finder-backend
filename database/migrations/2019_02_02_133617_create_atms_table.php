@@ -19,6 +19,8 @@ class CreateAtmsTable extends Migration
             $table->double('lat');
             $table->double('lng');
             $table->integer('status');
+            $table->integer('branch_id')->unsigned()->index();
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->integer('bank_id')->unsigned()->index();
             $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade');
             $table->string('city');

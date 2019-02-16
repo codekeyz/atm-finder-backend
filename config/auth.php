@@ -20,7 +20,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'api'),
+        'guard' => env('AUTH_GUARD', 'bank'),
     ],
 
     /*
@@ -41,10 +41,14 @@ return [
     */
 
     'guards' => [
-        'api' => [
+        'bank' => [
             'driver' => 'jwt',
             'provider' => 'banks'
         ],
+        'manager' => [
+            'driver' => 'jwt',
+            'provider' => 'managers'
+        ]
     ],
 
     /*
@@ -67,8 +71,12 @@ return [
     'providers' => [
         'banks' => [
             'driver' => 'eloquent',
-            'model'  => \App\Models\Bank::class,
+            'model'  => \App\Models\Bank::class
         ],
+        'managers' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Manager::class
+        ]
     ],
 
     /*

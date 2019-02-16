@@ -102,6 +102,6 @@ class BankController extends Controller
     }
 
     public function guard() {
-        return Auth::guard('api');
+        return Auth::guard('bank');
     }
 }

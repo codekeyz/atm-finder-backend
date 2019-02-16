@@ -23,13 +23,7 @@ class ATMResource extends JsonResource
                 'lat' => $this->lat,
                 'lng' => $this->lng
             ],
-            'bank' => $this->when(!$request->user(), [
-                'name' => $this->bank->name,
-                'desc' => $this->bank->desc,
-                'country' => $this->bank->country,
-                'city' => $this->bank->city,
-                'town' => $this->bank->town
-            ]),
+            'branch' => $this->branch->name,
             'created_at' => $this->when($request->user(), $this->created_at->toDateTimeString()),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

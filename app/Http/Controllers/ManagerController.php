@@ -16,6 +16,11 @@ class ManagerController extends Controller
         return ManagerResource::collection(ManagerSearch::apply($request));
     }
 
+    public function me()
+    {
+        return new ManagerResource($this->guard()->user());
+    }
+
     public function login(Request $request)
     {
         $this->validate($request, [
@@ -30,9 +35,12 @@ class ManagerController extends Controller
             }
 
         } catch (ValidationException $exception) {
-
         }
+
+        return $this->respondWithToken($token);
+
     }
+
     public function getManager($id){
         $manager = Manager::findOrFail($id);
         return new ManagerResource($manager);
@@ -69,5 +77,15 @@ class ManagerController extends Controller
 
     public function guard() {
         return Auth::guard('manager');
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'user' => $this->me(),
+            'token' => $token,
+            'type' => 'bearer',
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
+        ]);
     }
 }

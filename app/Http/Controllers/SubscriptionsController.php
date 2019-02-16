@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Stripe\Plan;
 use Stripe\Stripe;
 
@@ -17,4 +16,5 @@ class SubscriptionsController extends Controller
     public function getPlans() {
         return response()->json(['data' => Plan::all()->data]);
     }
+
 }

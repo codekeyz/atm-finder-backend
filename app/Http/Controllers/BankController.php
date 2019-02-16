@@ -49,7 +49,8 @@ class BankController extends Controller
         return new BankResource($bank);
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
         $id = $request->user()->id;
         Bank::findOrFail($id)->delete();
         return response('Deleted Successfully', 200);
@@ -70,25 +71,14 @@ class BankController extends Controller
 
         } catch (ValidationException $exception) {
 
-    }
+        }
 
         return $this->respondWithToken($token);
     }
 
-    public function logout()
+    public function guard()
     {
-        $this->guard()->invalidate($this->guard()->getToken());
-
-        return response()->json(['message' => 'Successfully logged you out' ]);
-    }
-
-    public function refresh()
-    {
-        return $this->respondWithToken($this->guard()->refresh());
-    }
-
-    public function me() {
-        return new BankResource($this->guard()->user());
+        return Auth::guard('bank');
     }
 
     protected function respondWithToken($token)
@@ -101,7 +91,20 @@ class BankController extends Controller
         ]);
     }
 
-    public function guard() {
-        return Auth::guard('bank');
+    public function me()
+    {
+        return new BankResource($this->guard()->user());
+    }
+
+    public function logout()
+    {
+        $this->guard()->invalidate($this->guard()->getToken());
+
+        return response()->json(['message' => 'Successfully logged you out']);
+    }
+
+    public function refresh()
+    {
+        return $this->respondWithToken($this->guard()->refresh());
     }
 }

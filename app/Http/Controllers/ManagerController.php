@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ATMResource;
 use App\Http\Resources\ManagerResource;
+use App\Models\ATM;
 use App\Models\Manager;
 use App\Search\ManagerSearch;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Dotenv\Exception\ValidationException;
 
 class ManagerController extends Controller
 {
-    public function getManagers(Request $request){
-        return ManagerResource::collection(ManagerSearch::apply($request));
-    }
-
-    public function me()
+    public function getManagers(Request $request)
     {
-        return new ManagerResource($this->guard()->user());
+        return ManagerResource::collection(ManagerSearch::apply($request));
     }
 
     public function login(Request $request)
@@ -31,51 +29,19 @@ class ManagerController extends Controller
         try {
 
             if (!$token = $this->guard()->attempt($request->only('email', 'password'))) {
-                return response()->json(['error' => 'Unauthorized'], 401);
+                return $this->sendErrorMessage(401, false, 'Unauthorized Access');
             }
 
         } catch (ValidationException $exception) {
+
         }
 
         return $this->respondWithToken($token);
 
     }
 
-    public function getManager($id){
-        $manager = Manager::findOrFail($id);
-        return new ManagerResource($manager);
-    }
-
-    public function create(Request $request)
+    public function guard()
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:managers',
-            'password' => 'required',
-            'branch_id' => 'required'
-        ]);
-        $payload = $request->all();
-        $payload['bank_id'] = $request->user()->id;
-        $payload['password'] = Hash::make($payload['password']);
-        $manager = Manager::create($payload);
-        return new ManagerResource($manager);
-    }
-
-    public function update($id, Request $request)
-    {
-        $manager = Manager::findOrFail($id);
-        $update = $request->only(['name', 'email']);
-        $manager->update($update);
-        return new ManagerResource($manager);
-    }
-
-    public function delete($id)
-    {
-        Manager::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
-    }
-
-    public function guard() {
         return Auth::guard('manager');
     }
 
@@ -87,5 +53,95 @@ class ManagerController extends Controller
             'type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60
         ]);
+    }
+
+    public function me()
+    {
+        return new ManagerResource($this->guard()->user());
+    }
+
+    public function logout()
+    {
+        $this->guard()->invalidate($this->guard()->getToken());
+
+        return response()->json(['message' => 'Successfully logged you out']);
+    }
+
+    public function refresh()
+    {
+        return $this->respondWithToken($this->guard()->refresh());
+    }
+
+    public function getManager($id)
+    {
+        $manager = Manager::findOrFail($id);
+        return new ManagerResource($manager);
+    }
+
+    public function create(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:managers',
+            'password' => 'required',
+            'branch_id' => 'required|numeric|exists:branches,id'
+        ]);
+        $payload = $request->all();
+        $payload['bank_id'] = $request->user()->id;
+        $payload['password'] = Hash::make($payload['password']);
+        $manager = Manager::create($payload);
+        return new ManagerResource($manager);
+    }
+
+    public function update(Request $request)
+    {
+        $id = $this->guard()->user()->id;
+        $manager = Manager::findOrFail($id);
+        if (!$manager) {
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
+        }
+        $this->validate($request, [
+            'email' => 'required|email|max:255',
+            'name' => 'string',
+        ]);
+        $update = $request->only(['name', 'email']);
+        $manager->update($update);
+        return new ManagerResource($manager);
+
+    }
+
+    public function delete()
+    {
+        $id = $this->guard()->user()->id;
+        $manager = Manager::findOrFail($id);
+        if (!$manager) {
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
+        }
+        $manager->delete();
+        return $this->sendErrorMessage(200, true, 'Action completed successfully');
+    }
+
+    public function getMyATMS()
+    {
+        return ATMResource::collection($this->guard()->user()->branch->atms);
+    }
+
+    public function updateATM($id, Request $request)
+    {
+        $this->validate($request, [
+            'status' => 'required|numeric'
+        ]);
+        $atm = (new ATM)->newQuery();
+        $result = $atm
+            ->where('branch_id', $this->guard()->user()->branch->id)
+            ->where('id', $id)
+            ->first();
+        if ($result) {
+            $update = $request->only(['status']);
+            $result->update($update);
+            return new ATMResource($result);
+        } else {
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
+        }
     }
 }

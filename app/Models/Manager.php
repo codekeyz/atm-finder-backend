@@ -26,7 +26,7 @@ class Manager extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'bank_id'
+        'name', 'email', 'password', 'bank_id', 'branch_id'
     ];
 
     /**
@@ -44,5 +44,9 @@ class Manager extends Model
 
     public function bank() {
         return $this->belongsTo(Bank::class);
+    }
+
+    public function branch() {
+        return $this->belongsTo(Branch::class);
     }
 }

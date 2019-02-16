@@ -17,11 +17,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         $this->app->register(\Tymon\JWTAuth\Providers\LumenServiceProvider::class);
-        try {
-            Cashier::useCurrency('ghc', '¢');
-        } catch (\Exception $e) {
-            dd($e);
-        }
     }
 
 }

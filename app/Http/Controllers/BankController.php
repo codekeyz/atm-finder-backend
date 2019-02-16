@@ -44,16 +44,22 @@ class BankController extends Controller
     {
         $id = $request->user()->id;
         $bank = Bank::findOrFail($id);
+        if (!$bank) {
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available');
+        }
         $bank->update($request->all());
-
         return new BankResource($bank);
     }
 
     public function delete(Request $request)
     {
         $id = $request->user()->id;
-        Bank::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        $bank = Bank::findOrFail($id);
+        if (!$bank) {
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available');
+        }
+        $bank->delete();
+        return $this->sendErrorMessage(200, true,'Action completed successfully');
     }
 
     public function login(Request $request)
@@ -66,7 +72,7 @@ class BankController extends Controller
         try {
 
             if (!$token = $this->guard()->attempt($request->only('email', 'password'))) {
-                return response()->json(['error' => 'Unauthorized'], 401);
+                return $this->sendErrorMessage(401, false, 'Unauthorized Access');
             }
 
         } catch (ValidationException $exception) {

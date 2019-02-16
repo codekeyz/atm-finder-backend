@@ -15,7 +15,7 @@ class BankController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'create']]);
+//        $this->middleware('auth:api', ['except' => ['login', 'create']]);
     }
 
     public function getOneOrAllBanks(Request $request)
@@ -28,12 +28,14 @@ class BankController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255|unique:banks',
             'email' => 'required|email|max:255|unique:banks',
+            'slogan' => 'string',
             'password' => 'required',
             'country' => 'required|string',
             'town' => 'required|string'
         ]);
         $payload = $request->all();
         $payload['password'] = Hash::make($payload['password']);
+        $payload['desc'] = $payload['slogan'];
         $bank = Bank::create($payload);
         return new BankResource($bank);
     }

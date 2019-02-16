@@ -30,7 +30,7 @@ class ATMController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'city' => 'required|string',
-            'status' => 'required|numeric',
+            'status' => 'required|numeric|between:-1,1',
             'lat' => 'required|numeric',
             'lng' => 'required|numeric',
             'branch_id' => 'required|numeric|exists:branches,id'
@@ -46,7 +46,7 @@ class ATMController extends Controller
         $this->validate($request, [
             'name' => 'max:255',
             'city' => 'string',
-            'status' => 'numeric',
+            'status' => 'numeric|between:-1,1',
             'lat' => 'numeric',
             'lng' => 'numeric',
             'branch_id' => 'numeric'

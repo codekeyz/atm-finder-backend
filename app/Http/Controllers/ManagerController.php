@@ -129,7 +129,7 @@ class ManagerController extends Controller
     public function updateATM($id, Request $request)
     {
         $this->validate($request, [
-            'status' => 'required|numeric'
+            'status' => 'required|numeric|between:-1,1'
         ]);
         $atm = (new ATM)->newQuery();
         $result = $atm

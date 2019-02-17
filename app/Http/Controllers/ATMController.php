@@ -10,11 +10,6 @@ use Illuminate\Http\Request;
 class ATMController extends Controller
 {
 
-    public function __construct()
-    {
-        //
-    }
-
     public function getAllATMs(Request $request)
     {
         return ATMResource::collection(ATMSearch::apply($request));
@@ -22,22 +17,9 @@ class ATMController extends Controller
 
     public function getATM($id) {
         $atm = ATM::findOrFail($id);
-        return new ATMResource($atm);
-    }
-
-    public function create(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'city' => 'required|string',
-            'status' => 'required|numeric|between:-1,1',
-            'lat' => 'required|numeric',
-            'lng' => 'required|numeric',
-            'branch_id' => 'required|numeric|exists:branches,id'
-        ]);
-        $payload = $request->all();
-        $payload['bank_id'] = $request->user()->id;
-        $atm = ATM::create($payload);
+        if (!$atm){
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
+        }
         return new ATMResource($atm);
     }
 
@@ -52,22 +34,12 @@ class ATMController extends Controller
             'branch_id' => 'numeric'
         ]);
         $atm = ATM::findOrFail($id);
+        if (!$atm){
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
+        }
         $update = $request->only(['name', 'status', 'lat', 'lng', 'city', 'branch_id']);
         $atm->update($update);
         return new ATMResource($atm);
     }
 
-    public function delete($id, Request $request)
-    {
-        $atm = (new ATM)->newQuery();
-        $result = $atm
-            ->where('bank_id', $request->user()->id)
-            ->where('id', $id)
-            ->first();
-        if (!$result) {
-            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
-        }
-        $result->delete();
-        return $this->sendErrorMessage(200, true, 'Action completed successfully');
-    }
 }

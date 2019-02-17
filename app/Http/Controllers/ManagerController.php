@@ -75,22 +75,15 @@ class ManagerController extends Controller
     public function getManager($id)
     {
         $manager = Manager::findOrFail($id);
+        if (!$manager) {
+            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
+        }
         return new ManagerResource($manager);
     }
 
     public function create(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:managers',
-            'password' => 'required',
-            'branch_id' => 'required|numeric|exists:branches,id'
-        ]);
-        $payload = $request->all();
-        $payload['bank_id'] = $request->user()->id;
-        $payload['password'] = Hash::make($payload['password']);
-        $manager = Manager::create($payload);
-        return new ManagerResource($manager);
+
     }
 
     public function update(Request $request)
@@ -110,9 +103,8 @@ class ManagerController extends Controller
 
     }
 
-    public function delete()
+    public function delete($id, Request $request)
     {
-        $id = $this->guard()->user()->id;
         $manager = Manager::findOrFail($id);
         if (!$manager) {
             return $this->sendErrorMessage(404, false, 'Requested Resource not available.');

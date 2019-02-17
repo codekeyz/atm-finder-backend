@@ -49,43 +49,43 @@ $router->group(['prefix' => '/'],function () use ($router) {
 
             $router->group(['prefix' => 'managers'], function () use ($router) {
 
-                $router->get('/', ['uses' => 'ManagerController@getManagers']);
+                $router->get('/', ['uses' => 'BankController@getManagers']);
 
-                $router->post('/', ['uses' => 'ManagerController@create']);
+                $router->post('/', ['uses' => 'BankController@createManager']);
 
-                $router->get('/{id}', ['uses' => 'ManagerController@getManager']);
+                $router->get('/{id}', ['uses' => 'BankController@getManager']);
 
-                $router->put('/{id}', ['uses' => 'ManagerController@update']);
+                $router->put('/{id}', ['uses' => 'BankController@updateManager']);
 
-                $router->delete('/{id}', ['uses' => 'ManagerController@delete']);
+                $router->delete('/{id}', ['uses' => 'BankController@deleteManager']);
 
             });
 
             $router->group(['prefix' => 'atms'], function () use ($router) {
 
-                $router->get('/', ['uses' => 'ATMController@getAllATMs']);
+                $router->get('/', ['uses' => 'BankController@getATMs']);
 
-                $router->post('/', ['uses' => 'ATMController@create']);
+                $router->post('/', ['uses' => 'BankController@createATM']);
 
-                $router->get('/{id}', ['uses' => 'ATMController@getATM']);
+                $router->get('/{id}', ['uses' => 'BankController@getATM']);
 
-                $router->delete('/{id}', ['uses' => 'ATMController@delete']);
+                $router->delete('/{id}', ['uses' => 'BankController@deleteATM']);
 
-                $router->put('/{id}', ['uses' => 'ATMController@update']);
+                $router->put('/{id}', ['uses' => 'BankController@updateATM']);
 
             });
 
             $router->group(['prefix' => 'branches'], function () use ($router) {
 
-                $router->get('/', ['uses' => 'BranchController@getAllBranches']);
+                $router->get('/', ['uses' => 'BankController@getBranches']);
 
-                $router->post('/', ['uses' => 'BranchController@create']);
+                $router->post('/', ['uses' => 'BankController@createBranch']);
 
-                $router->get('/{id}', ['uses' => 'BranchController@getBranch']);
+                $router->get('/{id}', ['uses' => 'BankController@getBranch']);
 
-                $router->delete('/{id}', ['uses' => 'BranchController@delete']);
+                $router->delete('/{id}', ['uses' => 'BankController@deleteBranch']);
 
-                $router->put('/{id}', ['uses' => 'BranchController@update']);
+                $router->put('/{id}', ['uses' => 'BankController@updateBranch']);
 
             });
 
@@ -103,8 +103,6 @@ $router->group(['prefix' => '/'],function () use ($router) {
                 $router->get('',['uses' => 'ManagerController@me']);
 
                 $router->put('', ['uses' => 'ManagerController@update']);
-
-                $router->delete('', ['uses' => 'ManagerController@delete']);
 
             });
 

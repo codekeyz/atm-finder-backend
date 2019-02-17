@@ -18,9 +18,9 @@ class ManagerSearch
     {
         $manager = (new Manager)->newQuery();
 
-        // Return managers for a bank
-        if ($filters->user()) {
-            $manager->where('bank_id', $filters->user()->id);
+        // Search for a manager based on bank id
+        if ($filters->has('bank_id')){
+            $manager->where('bank_id', $filters->get('bank_id'));
         }
 
         // Search for a atm based on their id.

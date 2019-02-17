@@ -19,8 +19,8 @@ class ATMSearch
         $atm = (new ATM)->newQuery();
 
         // Return atms for a bank
-        if ($filters->user()) {
-            $atm->where('bank_id', $filters->user()->id);
+        if ($filters->has('bank_id')) {
+            $atm->where('bank_id', $filters->get('bank_id'));
         }
 
         // Search for an atm based on it's id.

@@ -10,7 +10,6 @@ use App\Search\ManagerSearch;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class ManagerController extends Controller
 {

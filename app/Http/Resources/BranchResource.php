@@ -21,7 +21,9 @@ class BranchResource extends Resource
             'city' => $this->city,
             'town' => $this->town,
             'total_managers' => $this->managers->count(),
-            'total_atms' => $this->atms->count()
+            'total_atms' => $this->atms->count(),
+            'created_at' => $this->when($request->user(), $this->created_at->toDateTimeString()),
+            'updated_at' => $this->when($request->user(), $this->updated_at->toDateTimeString())
         ];
     }
 }

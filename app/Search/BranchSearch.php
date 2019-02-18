@@ -33,7 +33,7 @@ class BranchSearch
             $branch->where('name', $filters->input('name'));
         }
 
-        if ($filters->has('paginate')){
+        if ($filters->has('paginate') or $filters->has('page')){
             $perPage = (int)$filters->get('paginate');
             return $perPage <= 20 ? $branch->paginate($perPage) : $branch->paginate(20);
         }

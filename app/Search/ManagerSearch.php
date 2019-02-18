@@ -19,12 +19,12 @@ class ManagerSearch
         $manager = (new Manager)->newQuery();
 
         // Search for a manager based on bank id
-        if ($filters->has('bank_id')){
+        if ($filters->has('bank_id')) {
             $manager->where('bank_id', $filters->get('bank_id'));
         }
 
         // Search for a atm based on their id.
-        if ($filters->has('id')){
+        if ($filters->has('id')) {
             $manager->where('id', $filters->get('id'));
         }
 
@@ -33,13 +33,7 @@ class ManagerSearch
             $manager->where('name', $filters->input('name'));
         }
 
-        // Search for a manager based on their bank id.
-        if ($filters->has('bank_id')) {
-            $manager->where('bank_id', $filters->input('bank_id'));
-
-        }
-
-        if ($filters->has('paginate')){
+        if ($filters->has('paginate') or $filters->has('page')) {
             $perPage = (int)$filters->get('paginate');
             return $perPage <= 20 ? $manager->paginate($perPage) : $manager->paginate(20);
         }

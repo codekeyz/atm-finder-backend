@@ -29,7 +29,7 @@ class BankSearch
             $bank->with('atms');
         }
 
-        if ($filters->has('paginate')){
+        if ($filters->has('paginate')  or $filters->has('page')){
             $perPage = (int)$filters->get('paginate');
             return $perPage <= 20 ? $bank->paginate($perPage) : $bank->paginate(20);
         }

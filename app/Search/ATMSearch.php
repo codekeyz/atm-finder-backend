@@ -24,7 +24,7 @@ class ATMSearch
         }
 
         // Search for an atm based on it's id.
-        if ($filters->has('id')){
+        if ($filters->has('id')) {
             $atm->where('id', $filters->get('id'));
         }
 
@@ -38,7 +38,7 @@ class ATMSearch
             $atm->where('status', $filters->input('status'));
         }
 
-        if ($filters->has('paginate')){
+        if ($filters->has('paginate') or $filters->has('page')) {
             $perPage = (int)$filters->get('paginate');
             return $perPage <= 20 ? $atm->paginate($perPage) : $atm->paginate(20);
         }

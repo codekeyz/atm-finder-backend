@@ -37,6 +37,12 @@ class ATMSearch
         if ($filters->has('status')) {
             $atm->where('status', $filters->input('status'));
         }
+
+        if ($filters->has('paginate')){
+            $perPage = (int)$filters->get('paginate');
+            return $perPage <= 20 ? $atm->paginate($perPage) : $atm->paginate(20);
+        }
+
         return $atm->paginate(20);
     }
 }

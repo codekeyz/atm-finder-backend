@@ -38,6 +38,12 @@ class ManagerSearch
             $manager->where('bank_id', $filters->input('bank_id'));
 
         }
+
+        if ($filters->has('paginate')){
+            $perPage = (int)$filters->get('paginate');
+            return $perPage <= 20 ? $manager->paginate($perPage) : $manager->paginate(20);
+        }
+
         return $manager->paginate(20);
     }
 }

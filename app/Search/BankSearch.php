@@ -28,6 +28,12 @@ class BankSearch
             $bank->where('name', $filters->input('name'));
             $bank->with('atms');
         }
+
+        if ($filters->has('paginate')){
+            $perPage = (int)$filters->get('paginate');
+            return $perPage <= 20 ? $bank->paginate($perPage) : $bank->paginate(20);
+        }
+
         return $bank->get();
     }
 }

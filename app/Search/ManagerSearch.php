@@ -44,6 +44,6 @@ class ManagerSearch
             return $perPage <= 20 ? $manager->paginate($perPage) : $manager->paginate(20);
         }
 
-        return $manager->paginate(20);
+        return $manager->get();
     }
 }

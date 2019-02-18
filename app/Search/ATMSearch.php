@@ -43,6 +43,6 @@ class ATMSearch
             return $perPage <= 20 ? $atm->paginate($perPage) : $atm->paginate(20);
         }
 
-        return $atm->paginate(20);
+        return $atm->get();
     }
 }

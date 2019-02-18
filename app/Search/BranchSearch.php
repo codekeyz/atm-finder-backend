@@ -38,6 +38,6 @@ class BranchSearch
             return $perPage <= 20 ? $branch->paginate($perPage) : $branch->paginate(20);
         }
 
-        return $branch->paginate(20);
+        return $branch->get();
     }
 }

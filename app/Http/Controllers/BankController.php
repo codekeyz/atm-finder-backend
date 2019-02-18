@@ -173,7 +173,7 @@ class BankController extends Controller
         }
 
         $this->validate($request, [
-            'name' => 'unique:atms|max:255',
+            'name' => 'max:255|unique:atms,name,'.$result->id,
             'city' => 'string',
             'status' => 'numeric|between:-1,1',
             'lat' => 'numeric',
@@ -247,7 +247,7 @@ class BankController extends Controller
             return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
         }
         $this->validate($request, [
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|unique:managers,email,'.$result->id,
             'name' => 'string',
         ]);
         $update = $request->only(['name', 'email']);
@@ -315,7 +315,7 @@ class BankController extends Controller
         }
 
         $this->validate($request, [
-            'name' => 'string|max:255|unique:branches',
+            'name' => 'unique:branches,name,'.$result->id,
             'city' => 'string',
             'town' => 'string'
         ]);

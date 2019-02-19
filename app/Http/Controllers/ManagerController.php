@@ -6,6 +6,7 @@ use App\Http\Resources\ATMResource;
 use App\Http\Resources\ManagerResource;
 use App\Models\ATM;
 use App\Models\Manager;
+use App\Search\ATMSearch;
 use App\Search\ManagerSearch;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
@@ -71,19 +72,6 @@ class ManagerController extends Controller
         return $this->respondWithToken($this->guard()->refresh());
     }
 
-    public function getManager($id)
-    {
-        $manager = Manager::findOrFail($id);
-        if (!$manager) {
-            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
-        }
-        return new ManagerResource($manager);
-    }
-
-    public function create(Request $request)
-    {
-
-    }
 
     public function update(Request $request)
     {
@@ -102,19 +90,11 @@ class ManagerController extends Controller
 
     }
 
-    public function delete($id, Request $request)
-    {
-        $manager = Manager::findOrFail($id);
-        if (!$manager) {
-            return $this->sendErrorMessage(404, false, 'Requested Resource not available.');
-        }
-        $manager->delete();
-        return $this->sendErrorMessage(200, true, 'Action completed successfully');
-    }
 
-    public function getMyATMS()
+    public function getMyATMS(Request $request)
     {
-        return ATMResource::collection($this->guard()->user()->branch->atms);
+        $request['branch_id'] = $this->guard()->user()->branch->id;
+        return ATMResource::collection(ATMSearch::apply($request));
     }
 
     public function updateATM($id, Request $request)

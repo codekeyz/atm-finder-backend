@@ -23,6 +23,11 @@ class ATMSearch
             $atm->where('bank_id', $filters->get('bank_id'));
         }
 
+        // Return atms for a branch
+        if ($filters->has('branch_id')) {
+            $atm->where('branch_id', $filters->get('branch_id'));
+        }
+
         // Search for an atm based on it's id.
         if ($filters->has('id')) {
             $atm->where('id', $filters->get('id'));

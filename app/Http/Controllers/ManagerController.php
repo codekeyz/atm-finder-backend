@@ -11,6 +11,9 @@ use App\Search\ManagerSearch;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class ManagerController extends Controller
 {
@@ -69,7 +72,21 @@ class ManagerController extends Controller
 
     public function refresh()
     {
-        return $this->respondWithToken($this->guard()->refresh());
+        {
+            try {
+
+                $newtoken = $this->guard()->refresh();
+
+            } catch (TokenExpiredException $e) {
+                return $this->sendErrorMessage(404, false, 'token_expired');
+            }catch (TokenInvalidException $e) {
+                return $this->sendErrorMessage(404, false, 'token_invalid');
+            }catch (JWTException $e) {
+                return $this->sendErrorMessage(404, false, 'token_absent');
+            }
+
+            return $this->respondWithToken($newtoken);
+        }
     }
 
 
